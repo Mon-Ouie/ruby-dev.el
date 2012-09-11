@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+require 'rubygems'
+gem 'pry',  '~> 0.9'
+gem 'yard', '~> 0.8'
+
 require 'set'
 require 'json'
 require 'fiber'
@@ -83,7 +87,7 @@ class RubyDev
   # @param [String] name Name fo the query to process.
   # @yieldparam [Hash] query JSON object received from the client
   # @yieldreturn [Hash] The object to send back to the client
-  def command(name, &block)
+  def self.command(name, &block)
     commands[name] = block
   end
 
@@ -120,7 +124,7 @@ class RubyDev
 
   # Attempts to run the correct handler for a certain type of query.
   def dispatch(query)
-    if c = commands[query[type]]
+    if c = commands[query["type"]]
       instance_exec(query, &c)
     else
       {:success   => false,
