@@ -16,7 +16,7 @@ Installation
 Add this directory to the load path and Something like this in your
 configuration:
 
-    (autoload 'turn-on-ruby-dev "ruby-dev")
+    (autoload 'turn-on-ruby-dev "ruby-dev" nil t)
     (add-hook 'ruby-mode-hook 'turn-on-ruby-dev)
 
 For the server to start properly you need to install a couple of gems:
