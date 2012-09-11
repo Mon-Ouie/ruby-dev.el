@@ -97,7 +97,8 @@ OBJECT is a ruby expression, used to start pry into."
               (kill-buffer buffer)
               (remhash id ruby-dev-repls))
           (ruby-dev-handle-repl id)
-          (switch-to-buffer-other-window buffer))))))
+          (switch-to-buffer-other-window buffer)
+          (move-end-of-line nil))))))
 
 (defun ruby-dev-repl-current-line (&key without-properties)
   "Returns the current line of input.
