@@ -83,8 +83,8 @@ OBJECT is a ruby expression, used to start pry into."
   (interactive
    (reverse
     (list
-     (read-string "REPL in: " nil nil "TOPLEVEL_BINDING")
-     (read-string "REPL id: " nil nil "main"))))
+     (read-string "REPL in (default: TOPLEVEL_BINDING): " nil nil "TOPLEVEL_BINDING")
+     (read-string "REPL id (default: main): " nil nil "main"))))
   (ruby-dev-ensure)
   (let ((buffer (ruby-dev-create-repl-buffer id)))
     (puthash id buffer ruby-dev-repls)
