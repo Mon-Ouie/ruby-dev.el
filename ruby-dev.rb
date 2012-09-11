@@ -117,7 +117,7 @@ class RubyDev
         query = JSON.parse(line)
         write_result dispatch(query)
       rescue JSON::JSONError => e
-        @error.puts "#{e.class}: #{e.massage}"
+        @error.puts "#{e.class}: #{e.message}"
       end
     end
   end
