@@ -12,7 +12,7 @@
   :group 'ruby-dev
   :group 'faces)
 
-(defcustom ruby-dev-autostart nil
+(defcustom ruby-dev-autostart t
   "When non-nil, interactive commands that need to start ruby-dev will do it
 automatically."
   :group 'ruby-dev
