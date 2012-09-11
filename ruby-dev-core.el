@@ -12,11 +12,25 @@
   :group 'ruby-dev
   :group 'faces)
 
+(defvar ruby-dev-path (if load-file-name (file-name-directory load-file-name))
+  "Path to the directory containing ruby-dev. Mostly used to run the
+ruby script it is related to.")
+
 (defcustom ruby-dev-autostart t
   "When non-nil, interactive commands that need to start ruby-dev will do it
 automatically."
   :group 'ruby-dev
   :type  'boolean)
+
+(defcustom ruby-dev-script-path (expand-file-name "ruby-dev.rb" ruby-dev-path)
+  "Path to the script to start a ruby dev server."
+  :group 'ruby-dev
+  :type 'string)
+
+(defcustom ruby-dev-ruby-executable "ruby"
+  "Name of the executable to start Ruby."
+  :group 'ruby-dev
+  :type 'string)
 
 (defvar ruby-dev-process nil
   "Process used to send commands, etc. to the Ruby shell.")
@@ -32,10 +46,6 @@ to `ruby-dev-enqueue-response'.")
 
 If you're waiting for a response to be added to this queue, use
 `ruby-dev-read-response' to retrieve it.")
-
-(defvar ruby-dev-path (if load-file-name (file-name-directory load-file-name))
-  "Path to the directory containing ruby-dev. Mostly used to run the
-ruby script it is related to.")
 
 (defvar ruby-dev-special-handlers nil
   "Association list for handlers used by asynchronous commands.
@@ -95,8 +105,8 @@ This is a macro only because it needs to call `called-interactively-p'."
 This does not check if there's another ruby-dev process running at the moment.
 If you want to start the process safely, you should always use `ruby-dev'."
   (setq ruby-dev-process
-        (start-process "ruby-dev" nil "ruby"
-                       (expand-file-name "ruby-dev.rb" ruby-dev-path)))
+        (start-process "ruby-dev" nil ruby-dev-ruby-executable
+                       ruby-dev-script-path))
   (set-process-filter ruby-dev-process 'ruby-dev-process-filter))
 
 (defun ruby-dev-send-request (type &rest args)
