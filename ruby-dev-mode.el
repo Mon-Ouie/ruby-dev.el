@@ -12,7 +12,9 @@
     (define-key map (kbd "C-c C-r") 'ruby-dev-eval-region)
     (define-key map (kbd "C-c C-s") 'ruby-dev-eval-string)
     (define-key map (kbd "C-c C-d") 'ruby-dev-show-doc)
-    (define-key map (kbd "C-c C-i") 'ruby-dev-start-repl)
+    (define-key map (kbd "C-c C-i") (lambda ()
+                                      (ruby-dev-start-repl "main" "TOPLEVEL_BINDING")))
+    (define-key map (kbd "C-c C-I") 'ruby-dev-start-repl)
     map)
   "Keybindings for `ruby-dev-mode'.")
 
