@@ -4,6 +4,7 @@
 (require 'ruby-dev-error)
 (require 'ruby-dev-utils)
 
+;;;###autoload
 (defgroup ruby-dev-doc nil
   "Module to display the documentation of Ruby symbols."
   :group 'ruby-dev)
@@ -23,7 +24,7 @@
   :group 'ruby-dev-doc)
 
 (defface ruby-dev-doc-section-header-face
-  '((t (:inherit default
+  '((t (:inhernit default
                  :height 140 :weight bold)))
   "Face for the title of a documentation section (parameters, etc.)."
   :group 'ruby-dev-faces
@@ -221,6 +222,7 @@ If an error occured, it is shown to the user and nil is returned."
       (if (eql success :json-false) (ruby-dev-show-error response)
         response))))
 
+;;;###autoload
 (defun ruby-dev-show-doc (symbol)
   "Shows the documentation for a given symbol.
 
@@ -500,6 +502,7 @@ at the right line."
                             (aref ruby-dev-doc-source-location 1))
     (message "Soure location unknown. Try `ruby-dev-goto-source'.")))
 
+;;;###autoload
 (defvar ruby-dev-doc-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "TAB") 'forward-button)
@@ -512,6 +515,7 @@ at the right line."
     map)
   "Key bindings for the `ruby-dev-doc-mode'.")
 
+;;;###autoload
 (define-derived-mode ruby-dev-doc-mode special-mode "ri"
   "Major mode for viewing Ruby documentation for classes, modules or methods,
 as shown by `ruby-dev-show-doc'.

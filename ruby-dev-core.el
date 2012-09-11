@@ -3,10 +3,12 @@
 (require 'json)
 (require 'cl)
 
+;;;###autoload
 (defgroup ruby-dev nil
   "Extension to ruby-mode to communicate with a live Ruby session."
   :prefix "ruby-dev-")
 
+;;;###autoload
 (defgroup ruby-dev-faces nil
   "Faces used by ruby-dev."
   :group 'ruby-dev
@@ -16,17 +18,20 @@
   "Path to the directory containing ruby-dev. Mostly used to run the
 ruby script it is related to.")
 
+;;;###autoload
 (defcustom ruby-dev-autostart t
   "When non-nil, interactive commands that need to start ruby-dev will do it
 automatically."
   :group 'ruby-dev
   :type  'boolean)
 
+;;;###autoload
 (defcustom ruby-dev-script-path (expand-file-name "ruby-dev.rb" ruby-dev-path)
   "Path to the script to start a ruby dev server."
   :group 'ruby-dev
   :type 'string)
 
+;;;###autoload
 (defcustom ruby-dev-ruby-executable "ruby"
   "Name of the executable to start Ruby."
   :group 'ruby-dev
@@ -57,6 +62,7 @@ function, instead of going through the regular, synchronous processing queue.")
   "Returns non-nil if ruby-dev is running."
   (and ruby-dev-process (process-live-p ruby-dev-process)))
 
+;;;###autoload
 (defun ruby-dev ()
   "Starts the shell used for Ruby development
 
@@ -68,6 +74,7 @@ or to cancel this operation."
         (ruby-dev-restart-process))
     (ruby-dev-start-process)))
 
+;;;###autoload
 (defun ruby-dev-start-maybe ()
   "Like `ruby-dev', but doesn't do anything if the process is running already."
   (interactive)
@@ -86,12 +93,14 @@ This is a macro only because it needs to call `called-interactively-p'."
          (when (yes-or-no-p "No ruby-dev process started. Start it? ")
            (ruby-dev))))))
 
+;;;###autoload
 (defun ruby-dev-restart-process ()
   "Restarts the ruby-dev process."
   (interactive)
   (ruby-dev-stop-process)
   (ruby-dev-start-process))
 
+;;;###autoload
 (defun ruby-dev-stop-process ()
   "Kills the ruby-dev process."
   (interactive)

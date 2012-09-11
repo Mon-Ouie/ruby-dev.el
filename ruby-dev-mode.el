@@ -4,6 +4,7 @@
 (require 'ruby-dev-doc)
 (require 'ruby-dev-repl)
 
+;;;###autoload
 (defvar ruby-dev-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "C-x C-e") 'ruby-dev-eval-last-sexp)
@@ -19,16 +20,19 @@
     map)
   "Keybindings for `ruby-dev-mode'.")
 
+;;;###autoload
 (define-minor-mode ruby-dev-mode
   "Minor mode for live features in ruby-mode.
 
 \\{ruby-dev-mode-map}"
   :lighter " Dev")
 
+;;;###autoload
 (defun turn-on-ruby-dev ()
   (interactive)
   (ruby-dev-mode 1))
 
+;;;###autoload
 (defun turn-off-ruby-dev ()
   (interactive)
   (ruby-dev-mode -1))

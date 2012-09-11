@@ -3,6 +3,7 @@
 (require 'ruby-dev-core)
 (require 'ruby-dev-error)
 
+;;;###autoload
 (defun ruby-dev-eval-string (code &optional filename line)
   "Evaluates an arbitrary string of ruby code.
 
@@ -24,6 +25,7 @@ Optionally, you can specify a FILENAME (__eval__ by default) and a LINE number
 If the `buffer-file-name' is set, it is used; otherwise, it defaluts to __eval__."
   (or (buffer-file-name) "__eval__"))
 
+;;;###autoload
 (defun ruby-dev-eval-region (start end &optional filename line)
   "Tries to evaluate a region of code.
 
@@ -35,6 +37,7 @@ but they can be specified explicitly."
   (unless line (setq line (line-number-at-pos start)))
   (ruby-dev-eval-string (buffer-substring start end) filename line))
 
+;;;###autoload
 (defun ruby-dev-eval-last-sexp (&optional filename line)
   "Evaluates the last 'sexp' in code.
 
@@ -49,6 +52,7 @@ Sexps are found using movement functions from `ruby-mode'."
       (setq end (point)))
     (ruby-dev-eval-region start end filename line)))
 
+;;;###autoload
 (defun ruby-dev-eval-buffer (&optional filename)
   "Evaluates the whole buffer.
 

@@ -64,12 +64,14 @@ This returns nil, for convenience."
   (goto-line ruby-dev-error-backtrace-line)
   nil)
 
+;;;###autoload
 (defvar ruby-dev-error-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map "TAB" 'forward-button)
     map)
   "Keymap for `ruby-dev-error-mode'.")
 
+;;;###autoload
 (define-derived-mode ruby-dev-error-mode special-mode "Ruby-Error"
   "Major mode for viewing Ruby exceptions and jumping through their backtrace, in
 the buffer shown by `ruby-dev-show-error'.

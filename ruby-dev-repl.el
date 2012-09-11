@@ -6,6 +6,7 @@
 
 (require 'ansi-color)
 
+;;;###autoload
 (defgroup ruby-dev-repl nil
   "Module to handle the Ruby REPL"
   :group 'ruby-dev)
@@ -75,6 +76,7 @@ Results are handled asynchronously by `ruby-dev-handle-repl-instruction'."
       (setq ruby-dev-repl-id id))
     buffer))
 
+;;;###autoload
 (defun ruby-dev-start-repl (id object)
   "Starts the REPL.
 
@@ -194,6 +196,7 @@ If ID is out of bounds, nothing happens."
   (insert value)
   (goto-char (point-max)))
 
+;;;###autoload
 (defvar ruby-dev-repl-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map "\C-m" 'ruby-dev-repl-send-input)
@@ -204,6 +207,7 @@ If ID is out of bounds, nothing happens."
     map)
   "Key bindings for `ruby-dev-repl-mode'.")
 
+;;;###autoload
 (define-derived-mode ruby-dev-repl-mode fundamental-mode "Ruby-REPL"
   "Major mode for interacting with a Ruby REPL.
 
