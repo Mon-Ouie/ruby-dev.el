@@ -19,7 +19,9 @@
   "Keybindings for `ruby-dev-mode'.")
 
 (define-minor-mode ruby-dev-mode
-  "Minor mode for live features in ruby-mode."
+  "Minor mode for live features in ruby-mode.
+
+\\{ruby-dev-mode-map}"
   :lighter " Dev")
 
 (defun turn-on-ruby-dev ()
