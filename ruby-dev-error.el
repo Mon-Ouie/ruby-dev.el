@@ -6,6 +6,8 @@
 (defvar ruby-dev-error-buffer nil
   "Buffer used to show errors to the user.")
 
+(defvar ruby-dev-error-backtrace-line nil)
+
 (defun ruby-dev-create-error-buffer ()
   "Creates a new buffer to use to display errors, and returns it.
 
@@ -39,6 +41,7 @@ This displays the error message at the top, followed by its backtrace."
       (if (eql success t)
           (insert "No error. I must have done something wrong in ruby-dev.el, sorry.")
         (insert error "\n\nBacktrace: \n")
+        (setq ruby-dev-error-backtrace-line (line-number-at-pos))
         (dotimes (i (length backtrace))
           (lexical-let ((entry (aref backtrace i)))
             (insert-text-button entry
@@ -58,6 +61,7 @@ This returns nil, for convenience."
     (ruby-dev-create-error-buffer))
   (ruby-dev-write-error response)
   (switch-to-buffer-other-window ruby-dev-error-buffer)
+  (goto-line ruby-dev-error-backtrace-line)
   nil)
 
 (defvar ruby-dev-error-mode-map
@@ -72,6 +76,7 @@ the buffer shown by `ruby-dev-show-error'.
 
 Commands:
 \\{ruby-dev-error-mode-map}"
-  (toggle-read-only 1))
+  (toggle-read-only 1)
+  (set (make-local-variable 'ruby-dev-error-backtrace-line) nil))
 
 (provide 'ruby-dev-error)
