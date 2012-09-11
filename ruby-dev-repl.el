@@ -227,4 +227,6 @@ If ID is out of bounds, nothing happens."
     (set (make-local-variable 'font-lock-syntactic-keywords)
          ruby-font-lock-syntactic-keywords)))
 
+;;; FIXME: code completion?
+
 (provide 'ruby-dev-repl)
