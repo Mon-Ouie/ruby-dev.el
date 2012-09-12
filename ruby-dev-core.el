@@ -26,6 +26,26 @@ automatically."
   :type  'boolean)
 
 ;;;###autoload
+(defcustom ruby-dev-auto-connect nil
+  "When non-nil, if `ruby-dev-autostart' is also set, the automatic connection
+will try to connect to a remote server instead of starting a subprocess.
+Otherwise, it is ignored."
+  :group 'ruby-dev
+  :type  'boolean)
+
+;;;###autoload
+(defcustom ruby-dev-default-host "127.0.0.1"
+  "Default host of the server for remote connections."
+  :group 'ruby-dev
+  :type  'string)
+
+;;;###autoload
+(defcustom ruby-dev-default-port 6475
+  "Default port of the server for remote connectioins."
+  :group 'ruby-dev
+  :type  'string)
+
+;;;###autoload
 (defcustom ruby-dev-script-path (expand-file-name "ruby-dev.rb" ruby-dev-path)
   "Path to the script to start a ruby dev server."
   :group 'ruby-dev
@@ -92,13 +112,20 @@ If the process is already running, the user is given the choice to restart it
 or to cancel this operation."
   (interactive
    (list
-    (read-string "Host: " "127.0.0.1")
-    (string-to-number (read-string "Port: " "6475"))))
+    (read-string "Host: " ruby-dev-default-host)
+    (string-to-number (read-string "Port: " (number-to-string ruby-dev-default-port)))))
   (unless (and (ruby-dev-running-p)
                (not (yes-or-no-p "ruby-dev already started. Restart it? ")))
     (ruby-dev-stop-process)
     (setq ruby-dev-process (open-network-stream "ruby-dev" nil host port))
     (set-process-filter ruby-dev-process 'ruby-dev-process-filter)))
+
+(defun ruby-dev-perform-autostart ()
+  "Depending on `ruby-dev-auto-connect', starts a subprocess or connects to a
+remote server."
+  (if ruby-dev-auto-connect (ruby-dev-connect ruby-dev-default-host
+                                              ruby-dev-default-port)
+    (ruby-dev)))
 
 ;;;###autoload
 (defun ruby-dev-start-maybe ()
@@ -106,8 +133,9 @@ or to cancel this operation."
   (interactive)
   (if ruby-dev-process
       (unless (process-live-p ruby-dev-process)
-        (ruby-dev-restart-process))
-    (ruby-dev-start-process)))
+        (ruby-dev-stop-process)
+        (ruby-dev-perform-autostart))
+    (ruby-dev-perform-autostart)))
 
 (defmacro ruby-dev-ensure ()
   "Macro called by interactive functions to ensure `ruby-dev' is running.
@@ -117,7 +145,7 @@ This is a macro only because it needs to call `called-interactively-p'."
      (if ruby-dev-autostart (ruby-dev-start-maybe)
        (unless (ruby-dev-running-p)
          (when (yes-or-no-p "No ruby-dev process started. Start it? ")
-           (ruby-dev))))))
+           (ruby-dev-perform-autostart))))))
 
 ;;;###autoload
 (defun ruby-dev-restart-process ()
