@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 
 require 'rubygems'
@@ -83,7 +84,10 @@ class RubyDev
     o.clean_up
   end
 
-  def self.run_server(host = DefaultHost, port = DefaultPort)
+  def self.run_server(host = nil, port = nil)
+    host ||= ENV["RUBY_DEV_HOST"] || RubyDev::DefaultHost
+    port ||= (p = ENV["RUBY_DEV_PORT"]) ? p.to_i : RubyDev::DefaultPort
+
     TCPServer.open(host, port) do |server|
       clients = {}
 
@@ -452,6 +456,13 @@ class RubyDev
   end
 end
 
-if __FILE__ == $0
-  RubyDev.run
+if __FILE__ == $PROGRAM_NAME
+  if ARGV[0] == "--help" || ARGV[0] == "-h"
+    puts "Usage: [RUBY_DEV_PORT=PORT RUBY_DEV_HOST=HOST] #$PROGRAM_NAME"\
+         " [--server]"
+  elsif ARGV[0] == "--server"
+    RubyDev.run_server
+  end
+else
+  Thread.new { RubyDev.run_server }
 end
