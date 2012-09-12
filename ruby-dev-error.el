@@ -68,6 +68,7 @@ This returns nil, for convenience."
 (defvar ruby-dev-error-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map "TAB" 'forward-button)
+    (define-key map "c" 'delete-window)
     map)
   "Keymap for `ruby-dev-error-mode'.")
 
