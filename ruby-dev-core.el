@@ -43,7 +43,7 @@ Otherwise, it is ignored."
 (defcustom ruby-dev-default-port 6475
   "Default port of the server for remote connectioins."
   :group 'ruby-dev
-  :type  'string)
+  :type  'integer)
 
 ;;;###autoload
 (defcustom ruby-dev-script-path (expand-file-name "ruby-dev.rb" ruby-dev-path)
