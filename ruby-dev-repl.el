@@ -45,16 +45,22 @@ up again, his changes are preserved.")
 (defvar ruby-dev-repl-history-pos 0
   "Position in the history.")
 
+(defun ruby-dev-repl-get (id)
+  "Returns the buffer REPL for a certain id."
+  (let ((buffer (gethash id ruby-dev-repls)))
+    (when (and buffer (buffer-live-p buffer))
+      buffer)))
+
 (defun ruby-dev-handle-repl-instruction (response)
   "Handler for the results of REPL-related commands."
   (with-ruby-dev-data (type repl-id success string prompt) response
     (cond
      ((eql success :json-false) (ruby-dev-show-error response))
      ((equal type "write")
-      (with-current-buffer (gethash repl-id ruby-dev-repls)
+      (with-current-buffer (ruby-dev-repl-get repl-id)
         (ruby-dev-repl-write-response string 'ruby-dev-repl-output-face)))
      ((equal type "read")
-      (with-current-buffer (gethash repl-id ruby-dev-repls)
+      (with-current-buffer (ruby-dev-repl-get repl-id)
         (ruby-dev-repl-start-read prompt))))))
 
 (add-to-list 'ruby-dev-special-handlers '(repl-id . ruby-dev-handle-repl-instruction))
@@ -107,6 +113,7 @@ OBJECT is a ruby expression, used to start pry into."
   "Starts a top-level REPL with main as its identifier."
   (interactive)
   (ruby-dev-ensure)
+  (if (get )
   (ruby-dev-start-repl "main" "TOPLEVEL_BINDING"))
 
 (defun ruby-dev-repl-current-line (&key without-properties)
