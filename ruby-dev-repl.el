@@ -110,11 +110,14 @@ OBJECT is a ruby expression, used to start pry into."
 
 ;;;###autoload
 (defun ruby-dev-start-main-repl ()
-  "Starts a top-level REPL with main as its identifier."
+  "Starts a top-level REPL with main as its identifier.
+
+If there already is such a REPL, just switch buffer"
   (interactive)
   (ruby-dev-ensure)
-  (if (get )
-  (ruby-dev-start-repl "main" "TOPLEVEL_BINDING"))
+  (let ((buffer (ruby-dev-repl-get "main")))
+    (if buffer (switch-to-buffer-other-window buffer)
+      (ruby-dev-start-repl "main" "TOPLEVEL_BINDING"))))
 
 (defun ruby-dev-repl-current-line (&key without-properties)
   "Returns the current line of input.
