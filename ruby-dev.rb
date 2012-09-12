@@ -18,6 +18,11 @@ end
 
 require 'yard'
 
+# Module to make a process able to communicate with Emacs (or another potential
+# client that understands this JSON-based protocol).
+#
+# You can use {RubyDev.run} or {RubyDev.run_server} to actually start the
+# communication (through standard input streams and a TCP server, respectively).
 class RubyDev
   DefaultHost = "127.0.0.1"
   DefaultPort = 6475
@@ -25,7 +30,13 @@ class RubyDev
   # @return [Integer] Size of chunks to read
   BlockSize = 1024
 
+  # An input object for Pry, that actually just feeds data to the user of a
+  # Fiber.
+  #
+  # @see RubyDev::Output
   class Input
+    # @param [String] prompt
+    # @return [String] Line read from the client
     def readline(prompt)
       Fiber.yield :read, prompt
     end
@@ -34,8 +45,10 @@ class RubyDev
     attr_accessor :completion_proc
   end
 
+  # An output object for Pry, works like the Input class.
+  #
+  # @see RubyDev::Input
   class Output
-    # Yields some text to write to the widget.
     def write(data)
       Fiber.yield :write, data.to_s
       data.size
@@ -46,7 +59,6 @@ class RubyDev
       self
     end
 
-    # Yields a sequence of strings to print on the widget.
     def print(*strings)
       strings.each do |str|
         Fiber.yield :write, str.to_s
@@ -55,8 +67,6 @@ class RubyDev
       nil
     end
 
-    # Yields a sequence of lines to print on the widget.
-    #
     # Notice this needs to special case Array, since IO#puts does that
     # too. Instead of printing the result of Array#to_s, we need to print
     # every element on a new line.
@@ -75,8 +85,14 @@ class RubyDev
     end
   end
 
+  # A wrapper to communicate with the actual {Pry} session.
+  #
+  # @attr [Fiber] fiber
+  # @attr [RubyDev::Input]  input
+  # @attr [RubyDev::Output] output
   REPL = Struct.new(:fiber, :input, :output)
 
+  # Starts RubyDev, using standard input streams.
   def self.run
     o = new
     o.run
@@ -84,6 +100,12 @@ class RubyDev
     o.clean_up
   end
 
+  # Starts a RubyDev server.
+  #
+  # @param [String, nil] host If nil, it defaults to the RUBY_DEV_HOST env
+  #   variable or {RubyDev::DefaultHost}
+  # @param [Integer, nil] port If nil, it defaults to the RUBY_DEV_PORT env
+  #   variable or {RubyDev::DefaultPort}
   def self.run_server(host = nil, port = nil)
     host ||= ENV["RUBY_DEV_HOST"] || RubyDev::DefaultHost
     port ||= (p = ENV["RUBY_DEV_PORT"]) ? p.to_i : RubyDev::DefaultPort
