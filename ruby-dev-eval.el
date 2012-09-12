@@ -52,6 +52,21 @@ Sexps are found using movement functions from `ruby-mode'."
       (setq end (point)))
     (ruby-dev-eval-region start end filename line)))
 
+(put 'ruby-dev-defun 'beginning-op 'ruby-beginning-of-defun)
+(put 'ruby-dev-defun 'end-op       'ruby-end-of-defun)
+(put 'ruby-dev-defun 'forward-op   'ruby-end-of-defun)
+
+;;;###autoload
+(defun ruby-dev-eval-defun (&optional filename line)
+  "Evaluates the current top-level expression at point.
+
+This is done using `ruby-beginnning-of-defun' and `ruby-end-of-defun'."
+  (interactive)
+  (ruby-dev-ensure)
+  (let ((bounds (bounds-of-thing-at-point 'ruby-dev-defun)))
+    (when bounds
+      (ruby-dev-eval-region (car bounds) (cdr bounds) filename line))))
+
 ;;;###autoload
 (defun ruby-dev-eval-buffer (&optional filename)
   "Evaluates the whole buffer.
