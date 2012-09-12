@@ -76,7 +76,17 @@ or to cancel this operation."
 
 ;;;###autoload
 (defun ruby-dev-connect (host port)
-  "Starts the shell used for Ruby development
+  "Starts the shell used for Ruby development, through TCP.
+
+The advantage of this is that you can run ruby-dev on a remote computer by
+running `ruby-dev.rb' with the '--server' argument on the server, setting the
+RUBY_DEV_HOST and RUBY_DEV_PORT environment variables to bind at the correct
+address.
+
+Another thing thats's made possible is to modify an actual program as it is
+running in a main loop, by having the ruby-dev server run in another thread.
+Conveniently, you can do that by just loading `ruby-dev.rb' before the actual
+script (e.g. with the '-r' command line argument).
 
 If the process is already running, the user is given the choice to restart it
 or to cancel this operation."
