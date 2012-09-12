@@ -131,6 +131,7 @@ Also adds a name to the string if needed."
 which can use its properties using ARGUMENTS to destructure it.
 
 HEADER is the name to use for the section."
+  (declare (indent 4))
   (let ((tags (gensym))
         (tag  (gensym)))
     `(let ((,tags (ruby-dev-find-tags ,tag-var ,tag-name)))
@@ -143,6 +144,7 @@ HEADER is the name to use for the section."
 
 (defmacro ruby-dev-handle-single-tag (header tag-var tag-name arguments &rest body)
   "Like `ruby-dev-handle-tags', except only the first tag found is used."
+  (declare (indent 4))
   (let ((label (gensym)))
     `(catch ',label
        (ruby-dev-handle-tags ,header ,tag-var ,tag-name ,arguments
