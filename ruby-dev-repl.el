@@ -106,6 +106,7 @@ OBJECT is a ruby expression, used to start pry into."
 (defun ruby-dev-start-main-repl ()
   "Starts a top-level REPL with main as its identifier."
   (interactive)
+  (ruby-dev-ensure)
   (ruby-dev-start-repl "main" "TOPLEVEL_BINDING"))
 
 (defun ruby-dev-repl-current-line (&key without-properties)
