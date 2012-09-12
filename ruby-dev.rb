@@ -7,6 +7,7 @@ gem 'yard', '~> 0.8'
 require 'set'
 require 'json'
 require 'fiber'
+require 'socket'
 
 require 'pry'
 begin
@@ -17,6 +18,12 @@ end
 require 'yard'
 
 class RubyDev
+  DefaultHost = "127.0.0.1"
+  DefaultPort = 6475
+
+  # @return [Integer] Size of chunks to read
+  BlockSize = 1024
+
   class Input
     def readline(prompt)
       Fiber.yield :read, prompt
@@ -76,6 +83,25 @@ class RubyDev
     o.clean_up
   end
 
+  def self.run_server(host = DefaultHost, port = DefaultPort)
+    TCPServer.open(host, port) do |server|
+      clients = {}
+
+      while out = IO.select([server] + clients.keys) and out[0]
+        out[0].each do |io|
+          if io == server
+            if socket = server.accept_nonblock
+              client = RubyDev.new(socket, socket)
+              clients[socket] = client
+            end
+          else
+            clients.delete io unless clients[io].process_io
+          end
+        end
+      end
+    end
+  end
+
   @commands = {}
 
   def self.commands
@@ -91,12 +117,15 @@ class RubyDev
     commands[name] = block
   end
 
-  def initialize
-    @input  = $stdin
-    @output = $stdout
-    @error  = $stderr
+  def initialize(input = $stdin, output = $stdout, error = $stderr)
+    @input  = input
+    @output = output
+    @error  = error
 
     @repls = {}
+
+    # for asynchronous processing.
+    @buffer = ""
   end
 
   def clean_up
@@ -107,18 +136,50 @@ class RubyDev
     self.class.commands
   end
 
-  # Main loop
+  # Main loop for synchronous processing.
   #
   # Each line received from input is parsed as a JSON object, and the
   # corresponding handler is then run.
   def run
     @input.each_line do |line|
-      begin
-        query = JSON.parse(line)
-        write_result dispatch(query)
-      rescue JSON::JSONError => e
-        @error.puts "#{e.class}: #{e.message}"
-      end
+      process_line(line)
+    end
+  end
+
+  # Function to call to further process the input, meant to be called only
+  # when there is such input (e.g. when IO.select notified us of it).
+  #
+  # @return [Boolean] True if there's still input to process, false otherwise.
+  def process_io
+    if @input.eof?
+      clean_up
+      @input.close
+      false
+    else
+      receive @input.read_nonblock(BlockSize)
+      true
+    end
+  end
+
+  # Adds a string to the buffer, and processes complete lines that have been
+  # found in it.
+  #
+  # @param [String] text
+  def receive(text)
+    @buffer << text
+
+    while pos = @buffer.index("\n")
+      process_line @buffer.slice!(0..pos)
+    end
+  end
+
+  # Processes a single line.
+  def process_line(line)
+    begin
+      query = JSON.parse(line)
+      write_result dispatch(query)
+    rescue JSON::JSONError => e
+      @error.puts "#{e.class}: #{e.message}"
     end
   end
 
@@ -391,4 +452,6 @@ class RubyDev
   end
 end
 
-RubyDev.run
+if __FILE__ == $0
+  RubyDev.run
+end

@@ -75,6 +75,22 @@ or to cancel this operation."
     (ruby-dev-start-process)))
 
 ;;;###autoload
+(defun ruby-dev-connect (host port)
+  "Starts the shell used for Ruby development
+
+If the process is already running, the user is given the choice to restart it
+or to cancel this operation."
+  (interactive
+   (list
+    (read-string "Host: " "127.0.0.1")
+    (string-to-number (read-string "Port: " "6475"))))
+  (unless (and (ruby-dev-running-p)
+               (not (yes-or-no-p "ruby-dev already started. Restart it? ")))
+    (ruby-dev-stop-process)
+    (setq ruby-dev-process (open-network-stream "ruby-dev" nil host port))
+    (set-process-filter ruby-dev-process 'ruby-dev-process-filter)))
+
+;;;###autoload
 (defun ruby-dev-start-maybe ()
   "Like `ruby-dev', but doesn't do anything if the process is running already."
   (interactive)
@@ -102,10 +118,10 @@ This is a macro only because it needs to call `called-interactively-p'."
 
 ;;;###autoload
 (defun ruby-dev-stop-process ()
-  "Kills the ruby-dev process."
+  "Kills the ruby-dev process (or connection)."
   (interactive)
   (when ruby-dev-process
-    (if (process-live-p ruby-dev-process) (kill-process ruby-dev-process))
+    (if (process-live-p ruby-dev-process) (delete-process ruby-dev-process))
     (setq ruby-dev-process nil)))
 
 (defun ruby-dev-start-process ()
