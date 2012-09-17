@@ -484,6 +484,8 @@ if __FILE__ == $PROGRAM_NAME
          " [--server]"
   elsif ARGV[0] == "--server"
     RubyDev.run_server
+  else
+    RubyDev.run
   end
 else
   Thread.new { RubyDev.run_server }
