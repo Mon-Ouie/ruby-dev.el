@@ -14,6 +14,7 @@
   :group 'ruby-dev
   :group 'faces)
 
+;;;###autoload
 (defvar ruby-dev-path (if load-file-name (file-name-directory load-file-name))
   "Path to the directory containing ruby-dev. Mostly used to run the
 ruby script it is related to.")
