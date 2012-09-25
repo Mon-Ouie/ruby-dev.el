@@ -143,7 +143,9 @@ If WITHOUT-PROPERTIES is true, text properties won't be fetched."
       (insert "\n")
       (add-text-properties (1- (point)) (point) '(rear-nonsticky t))
       (add-text-properties ruby-dev-repl-line-location (point) '(read-only t
-                                                                 front-sticky t))
+                                                                 front-sticky t
+                                                                 inhibit-line-move-field-capture
+                                                                 t))
       (ruby-dev-handle-repl ruby-dev-repl-id line)
       (ruby-dev-repl-store-line line))
     (setq ruby-dev-repl-line-location nil)
@@ -165,7 +167,9 @@ from the output of a command)."
                            `(font-lock-face ,face)
                            colored-string)
       (add-text-properties 0 (length colored-string) '(read-only t
-                                                      front-sticky t)
+                                                       front-sticky t
+                                                       field
+                                                       inhibit-line-move-field-capture)
                            colored-string)
       (add-text-properties (1- (length colored-string)) (length colored-string)
                            '(rear-nonsticky t)
