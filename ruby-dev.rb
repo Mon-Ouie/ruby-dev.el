@@ -245,7 +245,14 @@ class RubyDev
   # Searches for symbols that start with a given input.
   command "search-doc" do |query|
     search = query["input"]
-    {:success => true, :completions => search_symbol(search).to_a}
+    {
+      :success => true,
+      :completions => if limit = query["limit"]
+                        search_symbol(search).take(limit)
+                      else
+                        search_symbol(search).to_a
+                      end
+    }
   end
 
   # Recursively searches for a symbol.

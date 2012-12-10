@@ -55,6 +55,11 @@
   :group 'ruby-dev-faces
   :group 'ruby-dev-doc)
 
+(defcustom ruby-dev-doc-completions-limit 1000
+  "The maximal amount of elements retrieved when getting completions from the
+ruby-dev process."
+  :group 'ruby-dev-doc)
+
 (defvar ruby-dev-doc-source-location nil)
 (defvar ruby-dev-doc-instance-methods-line nil)
 (defvar ruby-dev-doc-class-methods-line nil)
@@ -157,7 +162,7 @@ HEADER is the name to use for the section."
 This returns a list of results, where each result is a string. If an error
 occurs, it is shown to the user, and nil is returned (so that further
 computations can go on as if there had been no matches found)."
-  (ruby-dev-send-request "search-doc" :input input)
+  (ruby-dev-send-request "search-doc" :input input :limit ruby-dev-doc-completions-limit)
   (let ((response (ruby-dev-read-response)))
     (with-ruby-dev-data (success completions) response
       (if (eql success :json-false) (ruby-dev-show-error response)
