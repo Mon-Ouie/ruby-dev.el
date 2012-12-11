@@ -18,14 +18,12 @@
   "Path to the directory containing ruby-dev. Mostly used to run the
 ruby script it is related to.")
 
-;;;###autoload
 (defcustom ruby-dev-autostart t
   "When non-nil, interactive commands that need to start ruby-dev will do it
 automatically."
   :group 'ruby-dev
   :type  'boolean)
 
-;;;###autoload
 (defcustom ruby-dev-auto-connect nil
   "When non-nil, if `ruby-dev-autostart' is also set, the automatic connection
 will try to connect to a remote server instead of starting a subprocess.
@@ -33,25 +31,21 @@ Otherwise, it is ignored."
   :group 'ruby-dev
   :type  'boolean)
 
-;;;###autoload
 (defcustom ruby-dev-default-host "127.0.0.1"
   "Default host of the server for remote connections."
   :group 'ruby-dev
   :type  'string)
 
-;;;###autoload
 (defcustom ruby-dev-default-port 6475
   "Default port of the server for remote connectioins."
   :group 'ruby-dev
   :type  'integer)
 
-;;;###autoload
 (defcustom ruby-dev-script-path (expand-file-name "ruby-dev.rb" ruby-dev-path)
   "Path to the script to start a ruby dev server."
   :group 'ruby-dev
   :type 'string)
 
-;;;###autoload
 (defcustom ruby-dev-ruby-executable "ruby"
   "Name of the executable to start Ruby."
   :group 'ruby-dev
