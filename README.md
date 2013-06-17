@@ -5,10 +5,13 @@ ruby-dev.el
 Ruby. It provides:
 
   - Evaluation of code to a live process (C-x C-e, etc.)
+  - Copying of results of the evaluated ruby code into buffers via the kill chain (preface eval commands with C-u)
   - Access to Ruby documentation (C-c C-d)
   - A wrapper around a Ruby REPL (C-c C-i)
 
 For more details, see the help within Emacs.
+
+
 
 Installation
 ------------
