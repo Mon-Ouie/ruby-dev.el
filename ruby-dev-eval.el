@@ -24,7 +24,7 @@ Optionally, you can specify a FILENAME (__eval__ by default) and a LINE number
 
 ;;;###autoload 
 (defun ruby-dev-eval-string-and-kill (code &optional filename line)
-  "Evaluates an arbitrary string of ruby code and adds it to the kill chain.
+  "Evaluates an arbitrary string of ruby code and adds it to the kill ring.
 
 Optionally, you can specify a FILENAME (__eval__ by default) and a LINE number
  (0 by default)."
@@ -57,7 +57,7 @@ but they can be specified explicitly."
 
 ;;;###autoload
 (defun ruby-dev-eval-region-and-kill (start end &optional filename line)
-  "Tries to evaluate a region of code and adds the result to the kill chain.
+  "Tries to evaluate a region of code and adds the result to the kill ring.
 
 FILENAME and LINE are normally guessed from the buffer and the location of START,
 but they can be specified explicitly."
@@ -86,7 +86,7 @@ Sexps are found using movement functions from `ruby-mode'."
 
 ;;;###autoload
 (defun ruby-dev-eval-last-sexp-and-kill (&optional filename line)
-  "Evaluates the last 'sexp' in code and adds it to the kill chain.
+  "Evaluates the last 'sexp' in code and adds it to the kill ring.
 
 Sexps are found using movement functions from `ruby-mode'."
   (interactive)
@@ -113,7 +113,7 @@ This is done using `ruby-beginnning-of-defun' and `ruby-end-of-defun'."
 
 ;;;###autoload
 (defun ruby-dev-eval-defun-and-kill (&optional filename line)
-  "Evaluates the current top-level expression at point and adds it to the kill chain.
+  "Evaluates the current top-level expression at point and adds it to the kill ring.
 
 This is done using `ruby-beginnning-of-defun' and `ruby-end-of-defun'."
   (interactive)
