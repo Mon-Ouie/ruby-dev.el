@@ -11,8 +11,6 @@ Ruby. It provides:
 
 For more details, see the help within Emacs.
 
-
-
 Installation
 ------------
 

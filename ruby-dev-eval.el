@@ -18,11 +18,9 @@ Optionally, you can specify a FILENAME (__eval__ by default) and a LINE number
   (let ((response (ruby-dev-read-response)))
     (with-ruby-dev-data (success result) response
       (if (eql success :json-false) (ruby-dev-show-error response)
-        (message "%s" result)))))  
+        (message "%s" result)))))
 
-
-
-;;;###autoload 
+;;;###autoload
 (defun ruby-dev-eval-string-and-kill (code &optional filename line)
   "Evaluates an arbitrary string of ruby code and adds it to the kill ring.
 
@@ -30,8 +28,6 @@ Optionally, you can specify a FILENAME (__eval__ by default) and a LINE number
  (0 by default)."
   (interactive "sEval Ruby: ")
   (kill-new (ruby-dev-eval-string code filename line)))
-
-
 
 (defun ruby-dev-find-filename ()
   "Attempts to find the filename to use for code evaluated from the current buffer.
@@ -54,7 +50,6 @@ but they can be specified explicitly."
   (interactive "r")
   (ruby-dev-eval-region-common start end 'ruby-dev-eval-string filename line))
 
-
 ;;;###autoload
 (defun ruby-dev-eval-region-and-kill (start end &optional filename line)
   "Tries to evaluate a region of code and adds the result to the kill ring.
@@ -63,7 +58,6 @@ FILENAME and LINE are normally guessed from the buffer and the location of START
 but they can be specified explicitly."
   (interactive "r")
   (ruby-dev-eval-region-common start end 'ruby-dev-eval-string-and-kill filename line))
-
 
 (defun ruby-dev-eval-last-sexp-common (fct &optional filename line)
   (ruby-dev-ensure)
@@ -83,7 +77,6 @@ Sexps are found using movement functions from `ruby-mode'."
   (interactive)
   (ruby-dev-eval-last-sexp-common 'ruby-dev-eval-region filename line))
 
-
 ;;;###autoload
 (defun ruby-dev-eval-last-sexp-and-kill (&optional filename line)
   "Evaluates the last 'sexp' in code and adds it to the kill ring.
@@ -91,7 +84,6 @@ Sexps are found using movement functions from `ruby-mode'."
 Sexps are found using movement functions from `ruby-mode'."
   (interactive)
   (ruby-dev-eval-last-sexp-common 'ruby-dev-eval-region-and-kill filename line))
-
 
 (put 'ruby-dev-defun 'beginning-op 'ruby-beginning-of-defun)
 (put 'ruby-dev-defun 'end-op       'ruby-end-of-defun)
