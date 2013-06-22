@@ -235,7 +235,9 @@ If an error occured, it is shown to the user and nil is returned."
 
 If the symbol is not found, an error message is shown instead."
   (interactive
-   (list (completing-read "ri " 'ruby-dev-doc-completions)))
+   (progn
+     (ruby-dev-ensure)
+     (list (completing-read "ri " 'ruby-dev-doc-completions))))
   (ruby-dev-ensure)
   (let ((doc (ruby-dev-object-info symbol)))
     (unless (and ruby-dev-doc-buffer (buffer-live-p ruby-dev-doc-buffer))
