@@ -250,7 +250,7 @@ RESPONSE is the name of the expression that evaluates to the response. It is
 guaranteed to be evaluated only once."
   (declare (indent 2))
   (let ((response-var (gensym)))
-    (flet ((retrieve-slot (s)
+    (cl-flet ((retrieve-slot (s)
               (if (symbolp s) `(,s (cdr (assoc ',s ,response-var)))
                 `(,(first s) (cdr (assoc ',(nth 1 s) ,response-var))))))
       `(let* ((,response-var ,response)
